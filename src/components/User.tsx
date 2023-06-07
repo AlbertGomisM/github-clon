@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import { useForm } from "react-hook-form";
+import { BsFillChatRightHeartFill } from "react-icons/bs"
 
 
 export default function User() {
 
     const { register, handleSubmit } = useForm({ shouldUseNativeValidation: true })
 
-    const [userDisplayed, setUserDisplayed] = useState("AlbertGomisM")
+    const [userDisplayed, setUserDisplayed] = useState("midudev")
 
     const onSubmit = async (data: any) => {
         setUserDisplayed(data.user)
@@ -78,9 +79,6 @@ export default function User() {
     useEffect(() => {
         setRepos([])
         fetch(`https://api.github.com/users/${userDisplayed}`, {
-            headers: {
-                Authorization: `Bearer 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`
-            }
         })
             .then(res => res.json())
             .then(user => {
@@ -99,9 +97,6 @@ export default function User() {
             }
             )
         fetch(`https://api.github.com/users/${userDisplayed}/repos`, {
-            headers: {
-                Authorization: `Bearer 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`
-            }
         })
             .then(res => res.json())
             .then(receivedRepos => {
@@ -132,22 +127,24 @@ export default function User() {
             <div className="col">
                 <div className="row">
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <input type="text" defaultValue={"AlbertGomisM"} {...register("user")} />
-                        <button>Search User</button>
+                        <div  className="col align-items-center">
+                            <input type="text" defaultValue={"midudev"} {...register("user")} />
+                            <button className="btn btn-primary">Search User</button>
+                        </div>
                     </form>
-                    <div className="col">Hola</div>
-                    <div className="col">Que tal?</div>
-                    <div className="col">Bien</div>
+                    <div className="col btn">Overview</div>
+                    <div className="col btn">Profile</div>
+                    <div className="col btn">Projects</div>
                 </div>
                 <div className="row mt-5">
                     <div className="col col-lg-3">
                         <div className="lg-3">
-                            <img className="rounded-circle img-fluid" src={user.userImg} alt="profile IMG" />
+                            <img className="rounded-circle img-fluid w-75" src={user.userImg} alt="profile IMG" />
                             <h2>{user.userName}</h2>
                             <p>{user.login}</p>
                             <p>{user.bio}</p>
-                            <button>Follow</button>
-                            <div className="row">
+                            <button className="btn btn-primary">Follow</button>
+                            <div className="row mt-4">
                                 <p className="col">{user.followers} Followers</p>
                                 <p className="col">{user.following} Following</p>
                             </div>
@@ -155,8 +152,8 @@ export default function User() {
                         </div>
                     </div>
                     <div className="col">
-                        <div>
-                            <input type="text" onChange={handleSearch} placeholder="Search a repo"/>
+                        <div className="mb-3 text-start">
+                            <input type="text" onChange={handleSearch} placeholder="Search a repo " className="mb-3 align-self-start" />
                         </div>
                         <div>
                             {(searchDisplay.length > 0) ?
@@ -170,13 +167,20 @@ export default function User() {
                                 )
                                 ) :
                                 reposDisplay.map((repo) => (
-                                    <>
-                                        <p>{repo.repoName}</p>
-                                        {repo.description !== null && <p>{repo.description}</p>}
-                                        {repo.language !== null && <p>{repo.language}</p>}
-                                        {repo.fork > 0 && <p>Forks: {repo.fork}</p>}
-                                        <p>Updated {Math.trunc((Date.now() - (new Date(repo.updated).getTime())) / 86400 / 1000)} days ago</p>
-                                    </>
+                                    <div className="row border-top pt-3 pb-3 " >
+                                        <div className="col-8 text-start">
+                                            <h2 className="text-primary h3">{repo.repoName}</h2>
+                                            {repo.description !== null && <p>{repo.description}</p>}
+                                            <div className="row">
+                                                {repo.language !== null && <p className="col small">{repo.language}</p>}
+                                                {repo.fork > 0 && <p className="col small">Forks: {repo.fork}</p>}
+                                                <p className="col small">Updated {Math.trunc((Date.now() - (new Date(repo.updated).getTime())) / 86400 / 1000)} days ago</p>
+                                            </div>
+                                        </div>
+                                        <div className="col">
+                                        <BsFillChatRightHeartFill />
+                                        </div>
+                                    </ div>
                                 )
                                 )
                             }

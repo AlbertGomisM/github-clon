@@ -14,10 +14,6 @@ export default function User() {
         setUserDisplayed(data.user)
     };
 
-    type Inputs = {
-        search: string,
-    };
-
     const [search, setSearch] = useState<string>("");
     const [searchDisplay, setSearchDisplay] = useState<Repo[]>([]);
 
@@ -159,10 +155,20 @@ export default function User() {
                             {(searchDisplay.length > 0) ?
                                 searchDisplay.map((repo) => (
                                     <>
-                                        <p>{repo.repoName}</p>
-                                        {repo.description !== null && <p>{repo.description}</p>}
-                                        <p>{Math.trunc((Date.now() - (new Date(repo.updated).getTime())) / 86400 / 1000)} days ago</p>
-
+                                        <div className="row border-top pt-3 pb-3 " >
+                                        <div className="col-8 text-start">
+                                            <h2 className="text-primary h3">{repo.repoName}</h2>
+                                            {repo.description !== null && <p>{repo.description}</p>}
+                                            <div className="row">
+                                                {repo.language !== null && <p className="col small">{repo.language}</p>}
+                                                {repo.fork > 0 && <p className="col small">Forks: {repo.fork}</p>}
+                                                <p className="col small">Updated {Math.trunc((Date.now() - (new Date(repo.updated).getTime())) / 86400 / 1000)} days ago</p>
+                                            </div>
+                                        </div>
+                                        <div className="col">
+                                        <BsFillChatRightHeartFill />
+                                        </div>
+                                    </ div>
                                     </>
                                 )
                                 ) :
